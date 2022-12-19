@@ -8,3 +8,6 @@ cys-span-derive = { path = "derive", optional = true }
 
 [features]
 derive_macros = ["dep:cys-span-derive"]
+
+[dev-dependencies]
+trybuild = "1.0"

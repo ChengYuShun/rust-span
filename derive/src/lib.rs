@@ -10,10 +10,10 @@ fn match_started(fields: &Fields) -> TokenStream2 {
             .named
             .first()
             .map(|first| first.ident.as_ref().unwrap())
-            .map(|first| quote! { { #first, .. } => #first.start() }),
+            .map(|first| quote!({ #first, .. } => #first.start())),
         Fields::Unnamed(fields) => fields.unnamed.first().map(|_| {
             quote! {
-                (.., x) => x.start()
+                (x, ..) => x.start()
             }
         }),
         Fields::Unit => None,
@@ -27,7 +27,7 @@ fn match_ended(fields: &Fields) -> TokenStream2 {
             .named
             .last()
             .map(|last| last.ident.as_ref().unwrap())
-            .map(|last| quote! { { #last, .. } => #last.end() }),
+            .map(|last| quote!({ #last, .. } => #last.end())),
         Fields::Unnamed(fields) => fields.unnamed.last().map(|_| {
             quote! {
                 (.., x) => x.end()
@@ -38,7 +38,12 @@ fn match_ended(fields: &Fields) -> TokenStream2 {
     .expect("at least one field expected")
 }
 
-fn derive_fields<F>(input: TokenStream, match_fields: F) -> TokenStream
+fn derive_fields<F>(
+    input: TokenStream,
+    match_fields: F,
+    trait_name: TokenStream2,
+    meth_name: TokenStream2,
+) -> TokenStream
 where
     F: Fn(&Fields) -> TokenStream2,
 {
@@ -48,7 +53,8 @@ where
         data,
         ..
     } = parse_macro_input!(input);
-    let (impl_generics, ty_generics, where_generics) = generics.split_for_impl();
+    let (impl_generics, ty_generics, where_generics) =
+        generics.split_for_impl();
     let inner = match data {
         Data::Struct(s) => {
             let match_fields = match_fields(&s.fields);
@@ -65,11 +71,10 @@ where
         Data::Union(_) => panic!("union not supported"),
     };
     quote! {
-        impl #impl_generics crate::cys_parser::Started for #ident #ty_generics
-            #where_generics
+        impl #impl_generics #trait_name for #ident #ty_generics #where_generics
         {
            #[inline]
-           fn start(&self) -> usize {
+           fn #meth_name(&self) -> usize {
                 #inner
             }
         }
@@ -79,10 +84,15 @@ where
 
 #[proc_macro_derive(Started)]
 pub fn derive_started(input: TokenStream) -> TokenStream {
-    derive_fields(input, match_started)
+    derive_fields(
+        input,
+        match_started,
+        quote!(cys_span::Started),
+        quote!(start),
+    )
 }
 
 #[proc_macro_derive(Ended)]
 pub fn derive_ended(input: TokenStream) -> TokenStream {
-    derive_fields(input, match_ended)
+    derive_fields(input, match_ended, quote!(cys_span::Ended), quote!(end))
 }
