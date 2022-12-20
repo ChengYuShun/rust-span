@@ -3,11 +3,11 @@ name = "cys-span"
 version = "0.1.0"
 edition = "2021"
 
-[dependencies]
-cys-span-derive = { path = "derive", optional = true }
-
 [features]
 derive_macros = ["dep:cys-span-derive"]
+
+[dependencies]
+cys-span-derive = { path = "derive", optional = true }
 
 [dev-dependencies]
 trybuild = "1.0"
