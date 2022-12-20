@@ -1,6 +1,5 @@
-#[cfg(derive_macros)]
-#[macro_export]
-use cys_span_derive;
+#[cfg(feature = "derive-macros")]
+pub use cys_span_derive::*;
 
 /// A struct that has a known start index.
 pub trait Started {

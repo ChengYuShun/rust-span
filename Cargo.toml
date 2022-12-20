@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [features]
-derive_macros = ["dep:cys-span-derive"]
+derive-macros = ["dep:cys-span-derive"]
 
 [dependencies]
 cys-span-derive = { path = "derive", optional = true }
