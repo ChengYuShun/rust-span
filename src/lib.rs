@@ -72,7 +72,25 @@ impl<I> Ended for Index<I> {
 }
 
 /// A struct with Span.
-pub type Span<T> = Start<End<T>>;
+pub struct Span<T> {
+    pub start: usize,
+    pub end: usize,
+    pub inner: T,
+}
+
+impl<T> Started for Span<T> {
+    #[inline]
+    fn start(&self) -> usize {
+        self.start
+    }
+}
+
+impl<T> Ended for Span<T> {
+    #[inline]
+    fn end(&self) -> usize {
+        self.end
+    }
+}
 
 /// With an optional prefix.
 pub struct Prefix<A, B> {
@@ -177,5 +195,19 @@ impl<T: Ended> Ended for Box<T> {
     #[inline]
     fn end(&self) -> usize {
         self.as_ref().end()
+    }
+}
+
+impl Started for usize {
+    #[inline]
+    fn start(&self) -> usize {
+        *self
+    }
+}
+
+impl Ended for usize {
+    #[inline]
+    fn end(&self) -> usize {
+        *self
     }
 }
