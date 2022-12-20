@@ -166,3 +166,17 @@ impl<A: Ended, B: Ended> Ended for Appended<A, B> {
             .unwrap_or(self.first.end())
     }
 }
+
+impl<T: Started> Started for Box<T> {
+    #[inline]
+    fn start(&self) -> usize {
+        self.as_ref().start()
+    }
+}
+
+impl<T: Ended> Ended for Box<T> {
+    #[inline]
+    fn end(&self) -> usize {
+        self.as_ref().end()
+    }
+}
