@@ -12,6 +12,7 @@ pub trait Ended {
 }
 
 /// A started struct.
+#[derive(Clone, Copy, Debug, Hash, PartialEq, Eq)]
 pub struct Start<I> {
     pub inner: I,
     pub start: usize,
@@ -32,6 +33,7 @@ impl<I: Ended> Ended for Start<I> {
 }
 
 /// An ended struct.
+#[derive(Clone, Copy, Debug, Hash, PartialEq, Eq)]
 pub struct End<I> {
     pub inner: I,
     pub end: usize,
@@ -52,6 +54,7 @@ impl<I: Started> Started for End<I> {
 }
 
 /// A single token.
+#[derive(Clone, Copy, Debug, Hash, PartialEq, Eq)]
 pub struct Index<I> {
     pub inner: I,
     pub index: usize,
@@ -72,6 +75,7 @@ impl<I> Ended for Index<I> {
 }
 
 /// A struct with Span.
+#[derive(Clone, Copy, Debug, Hash, PartialEq, Eq)]
 pub struct Span<T> {
     pub start: usize,
     pub end: usize,
@@ -93,6 +97,7 @@ impl<T> Ended for Span<T> {
 }
 
 /// With an optional prefix.
+#[derive(Clone, Copy, Debug, Hash, PartialEq, Eq)]
 pub struct Prefix<A, B> {
     pub prefix: Option<A>,
     pub inner: B,
@@ -116,6 +121,7 @@ impl<A, B: Ended> Ended for Prefix<A, B> {
 }
 
 /// With an optional postfix.
+#[derive(Clone, Copy, Debug, Hash, PartialEq, Eq)]
 pub struct Postfix<A, B> {
     pub inner: A,
     pub postfix: Option<B>,
@@ -139,6 +145,7 @@ impl<A: Ended, B: Ended> Ended for Postfix<A, B> {
 }
 
 /// `AAA...B`
+#[derive(Clone, Debug, Hash, PartialEq, Eq)]
 pub struct Prepended<A, B> {
     pub precedings: Vec<A>,
     pub last: B,
@@ -162,6 +169,7 @@ impl<A, B: Ended> Ended for Prepended<A, B> {
 }
 
 /// `ABBB...`
+#[derive(Clone, Debug, Hash, PartialEq, Eq)]
 pub struct Appended<A, B> {
     pub first: A,
     pub followings: Vec<B>,
