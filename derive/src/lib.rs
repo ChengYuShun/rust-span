@@ -11,11 +11,9 @@ fn match_started(fields: &Fields) -> TokenStream2 {
             .first()
             .map(|first| first.ident.as_ref().unwrap())
             .map(|first| quote!({ #first, .. } => #first.start())),
-        Fields::Unnamed(fields) => fields.unnamed.first().map(|_| {
-            quote! {
-                (x, ..) => x.start()
-            }
-        }),
+        Fields::Unnamed(fields) => {
+            fields.unnamed.first().map(|_| quote!((x, ..) => x.start()))
+        }
         Fields::Unit => None,
     }
     .expect("at least one field expected")
@@ -28,11 +26,9 @@ fn match_ended(fields: &Fields) -> TokenStream2 {
             .last()
             .map(|last| last.ident.as_ref().unwrap())
             .map(|last| quote!({ #last, .. } => #last.end())),
-        Fields::Unnamed(fields) => fields.unnamed.last().map(|_| {
-            quote! {
-                (.., x) => x.end()
-            }
-        }),
+        Fields::Unnamed(fields) => {
+            fields.unnamed.last().map(|_| quote!((.., x) => x.end()))
+        }
         Fields::Unit => None,
     }
     .expect("at least one field expected")
@@ -58,7 +54,7 @@ where
     let inner = match data {
         Data::Struct(s) => {
             let match_fields = match_fields(&s.fields);
-            quote! { match self { Self #match_fields, } }
+            quote!(match self { Self #match_fields, })
         }
         Data::Enum(e) => {
             let branch = e.variants.iter().map(|variant| {
@@ -66,7 +62,7 @@ where
                 let fields = match_fields(&variant.fields);
                 quote! { Self::#ident #fields, }
             });
-            quote! { match self { #(#branch)* } }
+            quote!(match self { #(#branch)* })
         }
         Data::Union(_) => panic!("union not supported"),
     };
