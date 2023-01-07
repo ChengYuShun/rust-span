@@ -12,7 +12,7 @@ pub trait Ended {
 }
 
 /// A started struct.
-#[derive(Clone, Copy, Debug, Hash, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, Hash)]
 pub struct Start<I> {
     pub inner: I,
     pub start: usize,
@@ -32,8 +32,22 @@ impl<I: Ended> Ended for Start<I> {
     }
 }
 
+impl<I: PartialEq> PartialEq for Start<I> {
+    #[inline]
+    fn eq(&self, other: &Self) -> bool {
+        self.inner.eq(&other.inner)
+    }
+
+    #[inline]
+    fn ne(&self, other: &Self) -> bool {
+        self.inner.ne(&other.inner)
+    }
+}
+
+impl<I: Eq> Eq for Start<I> {}
+
 /// An ended struct.
-#[derive(Clone, Copy, Debug, Hash, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, Hash)]
 pub struct End<I> {
     pub inner: I,
     pub end: usize,
@@ -53,8 +67,22 @@ impl<I: Started> Started for End<I> {
     }
 }
 
+impl<I: PartialEq> PartialEq for End<I> {
+    #[inline]
+    fn eq(&self, other: &Self) -> bool {
+        self.inner.eq(&other.inner)
+    }
+
+    #[inline]
+    fn ne(&self, other: &Self) -> bool {
+        self.inner.ne(&other.inner)
+    }
+}
+
+impl<I: Eq> Eq for End<I> {}
+
 /// A single token.
-#[derive(Clone, Copy, Debug, Hash, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, Hash)]
 pub struct Index<I> {
     pub inner: I,
     pub index: usize,
@@ -74,8 +102,22 @@ impl<I> Ended for Index<I> {
     }
 }
 
+impl<I: PartialEq> PartialEq for Index<I> {
+    #[inline]
+    fn eq(&self, other: &Self) -> bool {
+        self.inner.eq(&other.inner)
+    }
+
+    #[inline]
+    fn ne(&self, other: &Self) -> bool {
+        self.inner.ne(&other.inner)
+    }
+}
+
+impl<I: Eq> Eq for Index<I> {}
+
 /// A struct with Span.
-#[derive(Clone, Copy, Debug, Hash, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, Hash)]
 pub struct Span<T> {
     pub start: usize,
     pub end: usize,
@@ -95,6 +137,20 @@ impl<T> Ended for Span<T> {
         self.end
     }
 }
+
+impl<I: PartialEq> PartialEq for Span<I> {
+    #[inline]
+    fn eq(&self, other: &Self) -> bool {
+        self.inner.eq(&other.inner)
+    }
+
+    #[inline]
+    fn ne(&self, other: &Self) -> bool {
+        self.inner.ne(&other.inner)
+    }
+}
+
+impl<I: Eq> Eq for Span<I> {}
 
 /// With an optional prefix.
 #[derive(Clone, Copy, Debug, Hash, PartialEq, Eq)]
