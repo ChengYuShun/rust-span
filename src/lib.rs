@@ -248,6 +248,76 @@ impl<A: Ended, B: Ended> Ended for Appended<A, B> {
     }
 }
 
+impl<T: Started> Started for (T,) {
+    #[inline(always)]
+    fn start(&self) -> usize {
+        self.0.start()
+    }
+}
+
+impl<T: Ended> Ended for (T,) {
+    #[inline(always)]
+    fn end(&self) -> usize {
+        self.0.end()
+    }
+}
+
+impl<T1: Started, T2> Started for (T1, T2) {
+    #[inline(always)]
+    fn start(&self) -> usize {
+        self.0.start()
+    }
+}
+
+impl<T1, T2: Ended> Ended for (T1, T2) {
+    #[inline(always)]
+    fn end(&self) -> usize {
+        self.1.end()
+    }
+}
+
+impl<T1: Started, T2, T3> Started for (T1, T2, T3) {
+    #[inline(always)]
+    fn start(&self) -> usize {
+        self.0.start()
+    }
+}
+
+impl<T1, T2, T3: Ended> Ended for (T1, T2, T3) {
+    #[inline(always)]
+    fn end(&self) -> usize {
+        self.2.end()
+    }
+}
+
+impl<T1: Started, T2, T3, T4> Started for (T1, T2, T3, T4) {
+    #[inline(always)]
+    fn start(&self) -> usize {
+        self.0.start()
+    }
+}
+
+impl<T1, T2, T3, T4: Ended> Ended for (T1, T2, T3, T4) {
+    #[inline(always)]
+    fn end(&self) -> usize {
+        self.3.end()
+    }
+}
+
+impl<T1: Started, T2, T3, T4, T5> Started for (T1, T2, T3, T4, T5) {
+    #[inline(always)]
+    fn start(&self) -> usize {
+        self.0.start()
+    }
+}
+
+impl<T1, T2, T3, T4, T5: Ended> Ended for (T1, T2, T3, T4, T5) {
+    #[inline(always)]
+    fn end(&self) -> usize {
+        self.4.end()
+    }
+}
+
 impl<T: Started> Started for Box<T> {
     #[inline]
     fn start(&self) -> usize {
