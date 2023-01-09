@@ -83,12 +83,12 @@ pub fn derive_started(input: TokenStream) -> TokenStream {
     derive_fields(
         input,
         match_started,
-        quote!(cys_span::Started),
+        quote!(::cys_span::Started),
         quote!(start),
     )
 }
 
 #[proc_macro_derive(Ended)]
 pub fn derive_ended(input: TokenStream) -> TokenStream {
-    derive_fields(input, match_ended, quote!(cys_span::Ended), quote!(end))
+    derive_fields(input, match_ended, quote!(::cys_span::Ended), quote!(end))
 }

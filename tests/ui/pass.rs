@@ -1,7 +1,6 @@
 use std::marker::PhantomData;
 
 use cys_span::*;
-use cys_span_derive::*;
 
 #[derive(Started, Ended)]
 struct SingleField(Span<()>);
