@@ -152,6 +152,27 @@ impl<I: PartialEq> PartialEq for Span<I> {
 
 impl<I: Eq> Eq for Span<I> {}
 
+/// A struct with extra data.
+#[derive(Clone, Copy, Debug, Default, Hash)]
+pub struct Extra<T, E> {
+    pub inner: T,
+    pub extra: E,
+}
+
+impl<T: Started, E> Started for Extra<T, E> {
+    #[inline(always)]
+    fn start(&self) -> usize {
+        self.inner.start()
+    }
+}
+
+impl<T: Ended, E> Ended for Extra<T, E> {
+    #[inline(always)]
+    fn end(&self) -> usize {
+        self.inner.end()
+    }
+}
+
 /// With an optional prefix.
 #[derive(Clone, Copy, Debug, Hash, PartialEq, Eq)]
 pub struct Prefix<A, B> {
