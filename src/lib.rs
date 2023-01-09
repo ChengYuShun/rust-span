@@ -352,17 +352,3 @@ impl<T: Ended> Ended for Box<T> {
         self.as_ref().end()
     }
 }
-
-impl Started for usize {
-    #[inline]
-    fn start(&self) -> usize {
-        *self
-    }
-}
-
-impl Ended for usize {
-    #[inline]
-    fn end(&self) -> usize {
-        *self
-    }
-}
